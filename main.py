@@ -4,21 +4,22 @@ import datetime
 # Main menu
 def Menu():
     print('*'*160)
-    print('MAIN MENU'.center(100))
-    print(' '*45+'1. Insert Employee Record/Records')
-    print(' '*45+'2. Display Sorted Empolyee Records as per Emp No')
-    print(' '*45+'3. Display Sorted Empolyee Records as per Names')
-    print(' '*45+'4. Display Sorted Empolyee Records as per Designation')
-    print(' '*45+'5. Display Employee Records as the Designation ')
-    print(' '*45+'6. Delete Record')
-    print(' '*45+'7. Update Record')
-    print(' '*45+'8. Search Employee Record Details as per the Employee ID')
-    print(' '*45+'9. Search Record Detalis as per the Customer Name')
-    print(' '*45+'10. Apply for leave')
-    print(' '*45+'11. Display Gross Salary Breakup')
-    print(' '*45+'12. Display salary receipt')
-    print(' '*45+'13. Display total number of active employee')
-    print(' '*45+'14. EXIT')
+    print('MAIN MENU'.center(90))
+    print(' '*40+'1. Insert Employee Record/Records')
+    print(' '*40+'2. Display Sorted Empolyee Records as per Emp No')
+    print(' '*40+'3. Display Sorted Empolyee Records as per Names')
+    print(' '*40+'4. Display Sorted Empolyee Records as per Designation')
+    print(' '*40+'5. Display Employee Records as the Designation ')
+    print(' '*40+'6. Delete Record')
+    print(' '*40+'7. Update Record')
+    print(' '*40+'8. Search Employee Record Details as per the Employee ID')
+    print(' '*40+'9. Search Record Detalis as per the Customer Name')
+    print(' '*40+'10. Apply for leave')
+    print(' '*40+'11. Display Gross Salary Breakup')
+    print(' '*40+'12. Display salary receipt')
+    print(' '*40+'13. Display total number of active employee')
+    print(' '*40+'14. List Employee to which Salary not given')
+    print(' '*40+'15. EXIT')
     print('*'*160)
 
 
@@ -101,7 +102,7 @@ def Insert(f):
                 if Desig.upper() in Des:
                     break
 
-            Sal=float(input('Enter Salary'))
+            Sal=float(input('Enter Salary: '))
             Dat=datetime.datetime.now()
             Dat=Dat.date()
 
@@ -114,6 +115,7 @@ def Insert(f):
                 if Salary_status==0 or Salary_status==1:
                     break
 
+            # Record data
             Rec={
             'ID':Eid.upper(),
             'NAME':Name.upper(),
@@ -190,6 +192,35 @@ def DisplayonDesig(f):
                     print()
             print('*'*160)
             print('Records Read:',c)
+
+    except EOFError:
+        print('='*160)
+        print('Records Read :',c)
+
+    except FileNotFoundError:
+        print(f,"Files Doesn't exist")
+
+# Display according to Salary status
+def DisplayonSalary(f):
+    try:
+        with open(f,'rb')as fil:
+            print('='*160)
+            c=0
+            Rec=pickle.load(fil)
+            f='%15s %15s %15s %15s %15s %15s %13s %15s %15s %15s'
+            print(f%('ID','NAME','MOBILE','EMAIL ADDRESS','Dept ID','Designation','SALARY','DATE OF JOINING', 'Leave status', 'Salary status'))
+            for i in Rec:
+                if i['Salary_status']==0:
+                    c=c+1
+                    print('='*160)
+                    for j in i.values():
+                        print('%15s'% j,end='')
+                    print()
+            if c==0:
+                print('No records found')
+            else:
+                print('*'*160)
+                print('Records Read:',c)
 
     except EOFError:
         print('='*160)
@@ -328,9 +359,9 @@ def Debit(f):
             print('Please note gross salary is calculated on the basis of the following criteria:')
             print('1.HRA is 30% of Basic Salary')
             print('2.DA is 15% of Basic Salary')
-            print('3.TAX deducted is 15% of (Basic+HRA+DA)')
-            print('4.Total Gross Salary is:Basic +HRA+DA-TAX')
-            ch=input('Continue(Y/N)')
+            print('3.TAX deducted is 15% of (Basic + HRA + DA)')
+            print('4.Total Gross Salary is: Basic + HRA + DA - TAX')
+            ch=input('Continue(Y/N): ')
             if ch=='y'or ch=='Y':
                 f='%15s %15s %15s %15s %15s %15s %15s '
                 print(f%('ID','NAME','Basic Salary','HRA','DA','TAX','GROSS SALARY'))
@@ -341,7 +372,7 @@ def Debit(f):
                     GROSS=HRA+DA+i['Sal']-TAX
                     print(f%(i['ID'],i['NAME'],i['Sal'],HRA,DA,TAX,GROSS))
             else:
-                print('Going to Main menu')
+                print('Going to Main menu.............')
 
     except FileNotFoundError:
         print(f,"File Doesn't exist")
@@ -365,7 +396,7 @@ def Slip(f):
                         if ch=='y'or ch=='Y':
                             print('*'*160)
                             print("\n")
-                            print("*******************Employee Salary Slip************************** ")
+                            print("******************* Employee Salary Slip ************************** ")
                             f='%15s %15s %15s %15s '
                             print(f%('ID','NAME','Basic Salary','Salary status'))
                             print()
@@ -388,10 +419,9 @@ def Count(f):
                 if i['ID']:
                     count+=1
         print("\n")
-        print(f"************************Total number of currently active employees are : {count} ***********************")
+        print(f"************************ Total number of currently active employees are : {count} ***********************")
         print("\n")
     
-
     except FileNotFoundError:
         print(f,"File Doesn't exist")
 
@@ -428,6 +458,8 @@ def Leave(f):
 
 # Creating a file name 'Employee'
 File='Employee'
+
+# Infinite loop
 while True:
     Menu()
     ch=input('Enter your choice: ')
@@ -461,46 +493,14 @@ while True:
     elif ch=='13':
         Count(File)
     elif ch=='14':
-        print('Exciting....')
+        DisplayonSalary(File)
+    elif ch=='15':
+        print('Exiting....')
         quit(1)
     else:
-        print('Wrong Choice Entered, Try again')
+        print('Wrong Choice Entered, Try again: ')
         
                     
                     
-                
-                
-                
-            
-
-            
-
-    
-
-            
-    
-                
-                    
-                        
-    
-                
-                        
-    
-            
-
-            
-        
-                    
-            
-    
-                
-                    
-                        
-            
-                    
-                                    
-        
-
-
-            
-    
+          
+      
