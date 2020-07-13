@@ -240,7 +240,7 @@ def Update(f):
             for p in Rec:
                 if A==p['ID']:
                     found=1
-                    for i in p.items():
+                    for i,j in p.items():
                         if i!='Date':
                             if i!='Sal':
                                 ch=input('Change '+i+'(Y/N): ')
